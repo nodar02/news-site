@@ -10,7 +10,7 @@
   // =========================
   const els = {
     grid: document.getElementById("newsGrid"),
-    //skeleton: document.getElementById("skeleton"),
+    skeleton: document.getElementById("skeleton"),
     empty: document.getElementById("emptyState"),
     error: document.getElementById("errorState"),
     errorText: document.getElementById("errorText"),
@@ -77,14 +77,14 @@
   function show(el) { el.hidden = false; }
   function hide(el) { el.hidden = true; }
 
-//   function renderSkeleton(count = 9) {
-//     els.skeleton.innerHTML = "";
-//     for (let i = 0; i < count; i++) {
-//       const d = document.createElement("div");
-//       d.className = "sk";
-//       els.skeleton.appendChild(d);
-//     }
-//   }
+  function renderSkeleton(count = 9) {
+    els.skeleton.innerHTML = "";
+    for (let i = 0; i < count; i++) {
+      const d = document.createElement("div");
+      d.className = "sk";
+      els.skeleton.appendChild(d);
+    }
+  }
 
   function parsePubDate(article) {
     // API example: "2026-01-30 09:40:00" + pubDateTZ:"UTC"
@@ -318,12 +318,10 @@
     hide(els.error);
     hide(els.empty);
 
-    //renderSkeleton(9);
-    //show(els.skeleton);
+    renderSkeleton(3);
+    show(els.skeleton);
     setStatus("Loading…");
     els.loadMoreBtn.disabled = true;
-
-    //showSkeleton();
 
     try {
       const url = new URL(API_URL);
@@ -366,10 +364,10 @@
       setStatus("Error");
     } finally {
       state.isLoading = false;
-      //hide(els.skeleton);
+      renderSkeleton(0);
       
       els.loadMoreBtn.disabled = state.isLoading || !state.nextPage;
-      //hideSkeleton();
+
     }
   }
 
@@ -442,9 +440,7 @@ function showSkeleton() {
   if (!els.skeleton) return;
 
   els.skeleton.hidden = false;
-  els.skeleton.style.display = "";
-  renderSkeleton(9);
-  els.skeleton.classList.add("grid--skeleton");
+  //renderSkeleton(9);
 }
 
 function hideSkeleton() {
