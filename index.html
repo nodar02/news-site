@@ -1,0 +1,108 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width,initial-scale=1" />
+  <title>NewsPulse</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header class="topbar">
+    <div class="container topbar__inner">
+      <div class="brand">
+        <div class="brand__logo" aria-hidden="true">NP</div>
+        <div class="brand__text">
+          <h1>NewsPulse</h1>
+          <p>Fresh headlines, clean reading.</p>
+        </div>
+      </div>
+
+      <div class="topbar__actions">
+        <button id="refreshBtn" class="btn btn--ghost" type="button" title="Refresh">
+          Refresh
+        </button>
+        <button id="themeBtn" class="btn btn--ghost" type="button" title="Toggle theme">
+          Theme
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="controls card">
+      <div class="controls__row">
+        <div class="field grow">
+          <label for="searchInput">Search</label>
+          <input id="searchInput" type="search" placeholder="Search title / description…" autocomplete="off" />
+        </div>
+
+        <div class="field">
+          <label for="countrySelect">Country</label>
+          <select id="countrySelect">
+            <option value="">All</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="languageSelect">Language</label>
+          <select id="languageSelect">
+            <option value="">All</option>
+          </select>
+        </div>
+
+        <div class="field">
+          <label for="categorySelect">Category</label>
+          <select id="categorySelect">
+            <option value="">All</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="controls__row controls__row--meta">
+        <div class="chips" id="activeChips" aria-live="polite"></div>
+
+        <div class="meta">
+          <span id="countLabel" class="meta__count">—</span>
+          <span class="dot" aria-hidden="true">•</span>
+          <span id="statusLabel" class="meta__status">Ready</span>
+        </div>
+      </div>
+    </section>
+
+    <section class="gridWrap">
+      <div id="skeleton" class=" grid--skeleton" hidden></div>
+
+      <div id="emptyState" class="empty" hidden>
+        <h2>No results</h2>
+        <p>Try changing filters or clearing search.</p>
+        <button id="clearBtn" class="btn" type="button">Clear filters</button>
+      </div>
+
+      <div id="errorState" class="empty empty--error" hidden>
+        <h2>Couldn’t load the news</h2>
+        <p id="errorText">Please try again.</p>
+        <button id="retryBtn" class="btn" type="button">Retry</button>
+      </div>
+
+      <div id="newsGrid" class="grid" aria-live="polite"></div>
+
+      <div class="loadMoreWrap">
+        <button id="loadMoreBtn" class="btn btn--wide" type="button" disabled>
+          Load more
+        </button>
+        <p class="hint">Tip: click a card to open the original source.</p>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="container footer__inner">
+      <span>Created by Nodar.</span>
+      <span class="footer__sep">•</span>
+      <span class="footer__muted">Powered by newsdata.io</span>
+    </div>
+  </footer>
+
+  <script src="app.js"></script>
+</body>
+</html>
