@@ -2,7 +2,7 @@
   // =========================
   // CONFIG
   // =========================
-  const API_URL = "https://newsdata.io/api/1/latest?apikey=pub_bc6b57ef085c400885234615cc429323&country=am,ge,ir,az";
+  const API_URL = "https://newsdata.io/api/1/latest?apikey=pub_bc6b57ef085c400885234615cc429323";
   const PAGE_SIZE = 9; // how many cards to show per fetch (client-side slice)
 
   // =========================

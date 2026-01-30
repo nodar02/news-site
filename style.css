@@ -30,6 +30,7 @@ body{
     radial-gradient(1200px 700px at 15% 5%, rgba(124,92,255,.22), transparent 60%),
     radial-gradient(900px 600px at 85% 0%, rgba(34,211,238,.18), transparent 55%),
     var(--bg);
+  background-attachment: fixed;
   color:var(--text);
 }
 
@@ -122,7 +123,7 @@ input, select{
   padding:10px 12px;
   border-radius:14px;
   border:1px solid var(--line);
-  background: rgba(0,0,0,.18);
+  background: rgba(0,0,0,.4);
   color: var(--text);
   outline:none;
 }
@@ -131,6 +132,16 @@ input, select{
 input:focus, select:focus{
   border-color: rgba(124,92,255,.7);
   box-shadow: 0 0 0 4px rgba(124,92,255,.18);
+}
+
+select option {
+  background: rgba(0,0,0,.4);
+  color: var(--text);
+}
+
+[data-theme="light"] select option {
+  background: rgba(255,255,255,.85);
+  color: #0e1220;
 }
 
 .btn{
