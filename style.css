@@ -364,3 +364,29 @@ select option {
   0%{background-position: 200% 0;}
   100%{background-position: -200% 0;}
 }
+
+/* Seen indicator */
+.seenIndicator{
+  position:absolute;
+  right:12px;
+  top:12px;
+  width: 28px;
+  height: 28px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  animation: fadeInSeen 0.3s ease;
+}
+
+@keyframes fadeInSeen{
+  from { opacity: 0; transform: scale(0.8); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+.newsCard--seen {
+  opacity: 0.85;
+}
+
+.newsCard--seen:hover {
+  opacity: 1;
+}

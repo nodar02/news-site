@@ -32,11 +32,31 @@
   // =========================
   // STATE
   // =========================
+  const SEEN_KEY = "newspulse_seen";
+  
+  function loadSeenArticles() {
+    try {
+      const saved = localStorage.getItem(SEEN_KEY);
+      return saved ? new Set(JSON.parse(saved)) : new Set();
+    } catch {
+      return new Set();
+    }
+  }
+  
+  function saveSeenArticles() {
+    try {
+      localStorage.setItem(SEEN_KEY, JSON.stringify([...state.seenArticles]));
+    } catch (e) {
+      console.warn("Could not save seen articles", e);
+    }
+  }
+  
   const state = {
     all: [],          // all loaded articles (across pages)
     visible: [],      // filtered + rendered list
     nextPage: null,   // pagination token
     isLoading: false,
+    seenArticles: loadSeenArticles(), // track seen article IDs
     filters: {
       q: "",
       country: "",
@@ -227,6 +247,11 @@
     });
   }
 
+  function markAsSeen(articleId) {
+    state.seenArticles.add(articleId);
+    saveSeenArticles();
+  }
+
   function renderCards(list) {
     els.grid.innerHTML = "";
 
@@ -237,16 +262,31 @@
       card.setAttribute("role", "link");
       card.setAttribute("aria-label", item.title);
 
+      const isSeen = state.seenArticles.has(item.id);
+      if (isSeen) {
+        card.classList.add("newsCard--seen");
+      }
+
       const badgeText = item.category?.[0] || item.language || "news";
 
       const imgHtml = item.image
         ? `<img src="${escapeHtml(item.image)}" alt="${escapeHtml(item.title)}" loading="lazy" referrerpolicy="no-referrer" />`
         : "";
 
+      const seenIconHtml = `
+        <div class="seenIndicator" title="Already viewed">
+          <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+            <circle cx="8" cy="8" r="7" fill="#22c55e" stroke="#fff" stroke-width="1.5"/>
+            <path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </div>
+      `;
+
       card.innerHTML = `
         <div class="thumb">
           ${imgHtml}
           <span class="badge">${escapeHtml(badgeText)}</span>
+          ${isSeen ? seenIconHtml : ''}
         </div>
 
         <div class="body">
@@ -272,7 +312,25 @@
       }
 
       const open = () => {
-        if (item.link) window.open(item.link, "_blank", "noopener,noreferrer");
+        if (item.link) {
+          markAsSeen(item.id);
+          // Update the card UI immediately
+          if (!card.classList.contains("newsCard--seen")) {
+            card.classList.add("newsCard--seen");
+            const indicator = document.createElement("div");
+            indicator.className = "seenIndicator";
+            indicator.title = "Already viewed";
+            indicator.innerHTML = `
+              <svg width="16" height="16" viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="8" cy="8" r="7" fill="#22c55e" stroke="#fff" stroke-width="1.5"/>
+                <path d="M5 8l2 2 4-4" stroke="#fff" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round"/>
+              </svg>
+            `;
+            const thumb = card.querySelector(".thumb");
+            if (thumb) thumb.appendChild(indicator);
+          }
+          window.open(item.link, "_blank", "noopener,noreferrer");
+        }
       };
 
       card.addEventListener("click", open);
